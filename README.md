@@ -16,4 +16,18 @@ python scripts/parse_tmx.py -i ${RAW_DATA}/en-de.tmx.gz -o ${RAW_DATA}/bos.en-de
 
 # Tokenize each sentence in the pseudo-documents, retaining associated docid
 python scripts/tokenize_docs.py -i ${RAW_DATA}/bos.en-de.tsv --max-sentences 10 | unpaste ${TOKENIZED_DOCS}/{ids,bos}.en-de.txt
+
+# Learn tfidf features
+cat ${TOKENIZED_DOCS}/bos.en-de.txt | rsample --seed 1234 10_000_000 | python scripts/train_tfidf.py -o en-de.tfidf.joblib
+```
+
+## Extracting salient context from training data
+
+```bash
+# Extracts the 10 most highly weighted tfidf features; can re-use for <10 w/ `cut`
+cat ${TOKENIZED_DOCS}/bos.en-de.txt | 
+python scripts/get_tfidf_feats.py -i ${TOKENIZED_DOCS}/bos.en-de.txt | paste ${TOKENIZED_DOCS}/ids.en-de.txt - > docid_to_tfidf_feats.en-de.tsv
+
+# Extracts the 10 most highly weighted YAKE features; can re-use for <10 w/ `cut`
+paste ${TOKENIZED_DOCS}/{ids,bos}.en-de.txt | python scripts/get_yake_feats.py > docid_to_yake_feats.en-de.tsv
 ```
