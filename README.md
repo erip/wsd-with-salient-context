@@ -7,7 +7,7 @@
 python -m venv venv && source venv/bin/activate && pip install -r requirements.txt
 ```
 
-In addition, we use several unix-y features from [here](https://github.com/mjpost/bin). Namely, we need:
+Then install [`fairseq`](https://github.com/facebookresearch/fairseq). In addition, we use several unix-y features from [here](https://github.com/mjpost/bin). Namely, we need:
 
 - `unpaste`: a sibling to normal unix `paste`
 - `rsample`: a stdin/stdout reservoir sampler
@@ -27,3 +27,21 @@ Given the pseudo-documents and the various saliency function extraction logic, w
 ```bash
 TGT=de bash extract_training_context.sh
 ```
+
+## Subword encoding and getting ready for fairseq
+
+We can now get everything ready for fairseq. This prepares data for all systems except the shuffled ones.
+
+```bash
+TGT=de bash prep_training_data.sh
+```
+
+## Fairseq preprocessing
+
+With all the data prepared, we can process the data for a given `$SALIENCY_FUNCTION` (e.g., tfidf5, yake10). This handles the splits for you, but you can change the number of workers by setting `NWORKERS` (20 by default).
+
+```bash
+TGT=de SALIENCY_FUNCTION=tfidf5 bash fairseq_preprocess.sh
+```
+
+
