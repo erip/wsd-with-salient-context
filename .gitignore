@@ -165,3 +165,4 @@ tokenized_data/
 *.joblib
 **/*.tsv
 **/*.pkl
+training_data/
