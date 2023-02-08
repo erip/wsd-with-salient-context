@@ -22,7 +22,7 @@ wget -nc https://web-language-models.s3.us-east-1.amazonaws.com/paracrawl/releas
 test -f ${RAW_DATA}/skinny-bos.en-${TGT}.tsv || (python scripts/parse_tmx.py -i ${RAW_DATA}/en-${TGT}.tmx.gz -o ${RAW_DATA}/skinny-bos.en-${TGT}.tsv -m ${RAW_DATA}/mapping.en-${TGT}.tsv -s en)
 
 # Group sentences into documents
-test -f ${RAW_DATA}/bos.en-${TGT}.tsv || (cat ${RAW_DATA}/skinny-bos.en-${TGT}.tsv | python scripts/docs.py > ${RAW_DATA}/bos.en-${TGT}.tsv)
+test -f ${RAW_DATA}/bos.en-${TGT}.tsv || (sort -nk1 ${RAW_DATA}/skinny-bos.en-${TGT}.tsv | python scripts/docs.py > ${RAW_DATA}/bos.en-${TGT}.tsv)
 
 # Filter documents
 test -f  ${INTERMEDIATE_DATA}/ids.en-${TGT}.txt || (python scripts/filter.py -i ${RAW_DATA}/bos.en-${TGT}.tsv --max-sentences 10 | unpaste ${INTERMEDIATE_DATA}/{ids,en,${TGT}}.en-${TGT}.txt)

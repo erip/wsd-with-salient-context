@@ -6,6 +6,17 @@ import numpy as np
 
 from tqdm import tqdm
 
+from argparse import ArgumentParser, FileType
+
+def setup_argparse():
+    parser = ArgumentParser()
+    parser.add_argument("-i", "--input", type=FileType("r"), default="-")
+    parser.add_argument("-o", "--output", type=FileType("w"), default="-")
+    parser.add_argument("-t", "--tfidf-model", type=str, required=True)
+    parser.add_argument("-b", "--buffer-size", type=int, default=2048, help="The number of featurize at once.")
+    return parser
+
+
 def get_feats(docs, model, feature_array, n=10):
     docs = [" ".join(doc.split(" [SENT] ")).lower() for doc in docs]
 
@@ -28,13 +39,15 @@ def grouper(iterable, n):
                 group = []
         except StopIteration:
             yield group
-            break        
+            break
 
 if __name__ == "__main__":
-    model = joblib.load('en-de.tfidf.joblib')
+    args = setup_argparse().parse_args()
+    model = joblib.load(args.tfidf_model)
     feature_array = np.array(model.get_feature_names_out())
 
-    for docs in grouper(map(str.strip, sys.stdin), 2*1024):
-        feats = get_feats(docs, model, feature_array)
-        for feat in feats:
-            print(" ".join(feat))
+    with args.input as fin, args.output as fout:
+        for docs in grouper(map(str.strip, fin), args.buffer_size):
+            feats = get_feats(docs, model, feature_array)
+            for feat in feats:
+                print(" ".join(feat), file=fout)

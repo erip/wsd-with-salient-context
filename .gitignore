@@ -163,3 +163,4 @@ raw_data/
 intermediate/
 tokenized_data/
 *.joblib
+**/*.tsv
