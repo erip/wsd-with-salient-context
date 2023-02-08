@@ -15,6 +15,7 @@ export YAKE5_BPE_DATA="${YAKE5_BPE_DATA:=yake5_bpe_data}"
 export YAKE10_BPE_DATA="${YAKE10_BPE_DATA:=yake10_bpe_data}"
 export TFIDF5_BPE_DATA="${TFIDF5_BPE_DATA:=tfidf5_bpe_data}"
 export TFIDF10_BPE_DATA="${TFIDF10_BPE_DATA:=tfidf10_bpe_data}"
+export _2SENT_BPE_DATA="${_2SENT_BPE_DATA:=2sent_bpe_data}"
 
 seq 0 3 | xargs -I{} mkdir -p ${TRAINING_DATA}/split{}
 
@@ -30,6 +31,13 @@ function lookup_context() {
   id_stream=$2
   output_stream=$3
   python scripts/lookup_id.py -i $id_stream -o $output_stream -m $pkl
+}
+
+function lookup_context_2sent() {
+  pkl=$1
+  id_stream=$2
+  output_stream=$3
+  python scripts/lookup_id_2sent.py -i $id_stream -o $output_stream -p $pkl
 }
 
 function create_saliency_bpe() {
@@ -51,6 +59,7 @@ function create_saliency_bpe() {
 
 export -f bpe_encode
 export -f lookup_context
+export -f lookup_context_2sent
 
 # Don't re-split, etc. if the training data is already available
 if [ ! -f "${TRAINING_DATA}/split0/train.en-${TGT}.id" ]; then 
@@ -85,6 +94,10 @@ test -f ${TRAINING_DATA}/split0/valid.en-${TGT}.yake10 || (seq 0 3 | xargs -I{} 
 test -f ${TRAINING_DATA}/split0/train.en-${TGT}.yake5 || (seq 0 3 | xargs -I{} bash -c 'cut -d" " -f-5 ${TRAINING_DATA}/split{}/train.en-${TGT}.yake10 > ${TRAINING_DATA}/split{}/train.en-${TGT}.yake5')
 test -f ${TRAINING_DATA}/split0/valid.en-${TGT}.yake5 || (seq 0 3 | xargs -I{} bash -c 'cut -d" " -f-5 ${TRAINING_DATA}/split{}/valid.en-${TGT}.yake10 > ${TRAINING_DATA}/split{}/valid.en-${TGT}.yake5')
 
+# get 2sent if we need them
+test -f ${TRAINING_DATA}/split0/train.en-${TGT}.2sent || (seq 0 3 | xargs -I{} bash -c 'lookup_context_2sent train_docid_to_doc_feats.en-${TGT}.pkl <(paste ${TRAINING_DATA}/split{}/train.en-${TGT}.id ${TRAINING_DATA}/split{}/train.en-${TGT}.en) ${TRAINING_DATA}/split{}/train.en-${TGT}.2sent ')
+test -f ${TRAINING_DATA}/split0/valid.en-${TGT}.2sent || (seq 0 3 | xargs -I{} bash -c 'lookup_context_2sent valid_docid_to_doc_feats.en-${TGT}.pkl <(paste ${RAW_DATA}/valid.en-${TGT}.id ${RAW_DATA}/valid.en-${TGT}.en) ${TRAINING_DATA}/split{}/valid.en-${TGT}.2sent ')
+
 
 test -f model.en-${TGT}.model || spm_train \
   --input=<(cat ${TRAINING_DATA}/train.en-${TGT}.{en,${TGT}}) \
@@ -102,6 +115,8 @@ seq 0 3 | xargs -I{} mkdir -p ${TFIDF5_BPE_DATA}/split{}
 seq 0 3 | xargs -I{} mkdir -p ${TFIDF10_BPE_DATA}/split{}
 seq 0 3 | xargs -I{} mkdir -p ${YAKE5_BPE_DATA}/split{}
 seq 0 3 | xargs -I{} mkdir -p ${YAKE10_BPE_DATA}/split{}
+seq 0 3 | xargs -I{} mkdir -p ${_2SENT_BPE_DATA}/split{}
+
 
 # baseline
 seq 0 3  | xargs -I{} bash -c 'bpe_encode model.en-${TGT}.model "${TRAINING_DATA}/split{}/train.en-${TGT}.en" "${BASELINE_BPE_DATA}/split{}/train.en-${TGT}.bpe.en"'
@@ -119,3 +134,6 @@ create_saliency_bpe $TRAINING_DATA "tfidf10" $TFIDF10_BPE_DATA $BASELINE_BPE_DAT
 create_saliency_bpe $TRAINING_DATA "yake5" $YAKE5_BPE_DATA $BASELINE_BPE_DATA $TGT
 # yake10
 create_saliency_bpe $TRAINING_DATA "yake10" $YAKE10_BPE_DATA $BASELINE_BPE_DATA $TGT
+
+# 2sent
+create_saliency_bpe $TRAINING_DATA "2sent" $_2SENT_BPE_DATA $BASELINE_BPE_DATA $TGT
