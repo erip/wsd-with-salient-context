@@ -28,13 +28,21 @@ Relevant environment variables; can be overriden.
 | `$INTERMEDIATE_DATA` | `$PWD/intermediate`   | Where filtered pseudo-documents will be stored                                          |
 | `$TOKENIZED_DATA`    | `$PWD/tokenized_data` | Where the post-filtered tokenized pseudo-documents will be stored (for salient context) |
 
-## Extracting salient context from training data
+## Extracting salient context from training/validation data
 
 Given the pseudo-documents and the various saliency function extraction logic, we can extract a docid to salient document context mapping with the following:
 
 ```bash
 TGT=de bash extract_training_context.sh
 ```
+
+Relevant environment variables; can be overriden.
+
+| Variable           | Default             | Purpose                                                                                 |
+|--------------------|---------------------|-----------------------------------------------------------------------------------------|
+| `$RAW_DATA`          | `$PWD/raw_data`       | Where the TMX and pre-filtered bitext will be stored                                    |
+| `$INTERMEDIATE_DATA` | `$PWD/intermediate`   | Where filtered pseudo-documents will be stored                                          |
+| `$TOKENIZED_DATA`    | `$PWD/tokenized_data` | Where the post-filtered tokenized pseudo-documents will be stored (for salient context) |
 
 ## Subword encoding and getting ready for fairseq
 
