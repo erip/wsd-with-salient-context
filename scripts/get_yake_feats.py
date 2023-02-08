@@ -13,7 +13,7 @@ if __name__ == "__main__":
     extractor = KeywordExtractor(lan="en", n=1, top=10)
     args = setup_argparse().parse_args()
     with args.input as fin, args.output as fout:
-        for line in map(str.strip, fin):
+        for line in map(lambda s: s.strip("\r\n"), fin):
             id_, text = line.split("\t")
             keywords = extractor.extract_keywords(text.replace(" [SENT] ", "").lower())
             print(id_, " ".join(kw[0] for kw in keywords), sep="\t", file=fout)
