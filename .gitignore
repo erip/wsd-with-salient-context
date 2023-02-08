@@ -166,3 +166,6 @@ tokenized_data/
 **/*.tsv
 **/*.pkl
 training_data/
+*_bpe_data/
+*.model
+*.vocab
