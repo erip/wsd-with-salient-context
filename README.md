@@ -17,8 +17,16 @@ Then install [`fairseq`](https://github.com/facebookresearch/fairseq). In additi
 To download the ParaCrawl data for a given English-X language (where `TGT=X`), create pseudo-documents, and learn noisy TFIDF features from the English side:
 
 ```bash
-TGT=de bash preproc.sh
+TGT=de bash collect_data.sh
 ```
+
+Relevant environment variables; can be overriden.
+
+| Variable           | Default             | Purpose                                                                                 |
+|--------------------|---------------------|-----------------------------------------------------------------------------------------|
+| `$RAW_DATA`          | `$PWD/raw_data`       | Where the TMX and pre-filtered bitext will be stored                                    |
+| `$INTERMEDIATE_DATA` | `$PWD/intermediate`   | Where filtered pseudo-documents will be stored                                          |
+| `$TOKENIZED_DATA`    | `$PWD/tokenized_data` | Where the post-filtered tokenized pseudo-documents will be stored (for salient context) |
 
 ## Extracting salient context from training data
 

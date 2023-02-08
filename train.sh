@@ -5,9 +5,11 @@ if [ "${SALIENCY_FUNCTION}" = "" ]; then
   echo "SALIENCY_FUNCTION must be set"
 fi
 
+EXPERIMENT_ROOT=${EXPERIMENT_ROOT:=./}
+
 
 DATA_DIR=$(find ${SALIENCY_FUNCTION}-data-bin -maxdepth 2 -mindepth 1 -type d | paste -s -d:)
-SAVEDIR="${SALIENCY_FUNCTION}-transformer"
+SAVEDIR="${EXPERIMENT_ROOT}/${SALIENCY_FUNCTION}-transformer"
 TB_LOGDIR="$SAVEDIR/tb_logs"
 
 mkdir -p "$SAVEDIR"

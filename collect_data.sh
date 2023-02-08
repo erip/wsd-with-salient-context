@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
 set -ex
 
-if [[ "$TGT" = "" ]]; then
+if [ "$TGT" = "" ]; then
   echo "TGT must be set"
   exit 2
 fi
 
-# set RAW_DATA to a place with a lot of disk space :-)
-export RAW_DATA="raw_data"
-export INTERMEDIATE_DATA="intermediate"
-export TOKENIZED_DATA="tokenized_data"
+export RAW_DATA="${RAW_DATA:=raw_data}"
+export INTERMEDIATE_DATA="${INTERMEDIATE_DATA:=intermediate}"
+export TOKENIZED_DATA="${TOKENIZED_DATA:=tokenized_data}"
 
 mkdir -p $RAW_DATA
 mkdir -p $INTERMEDIATE_DATA

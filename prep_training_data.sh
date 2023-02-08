@@ -6,15 +6,15 @@ if [ "$TGT" = "" ]; then
   exit 2
 fi
 
-export RAW_DATA="raw_data"
-export INTERMEDIATE_DATA="intermediate"
-export TOKENIZED_DATA="tokenized_data"
-export TRAINING_DATA="training_data"
-export BASELINE_BPE_DATA="sent_bpe_data"
-export YAKE5_BPE_DATA="yake5_bpe_data"
-export YAKE10_BPE_DATA="yake10_bpe_data"
-export TFIDF5_BPE_DATA="tfidf5_bpe_data"
-export TFIDF10_BPE_DATA="tfidf10_bpe_data"
+export RAW_DATA="${RAW_DATA:=raw_data}"
+export INTERMEDIATE_DATA="${INTERMEDIATE_DATA:=intermediate}"
+export TOKENIZED_DATA="${TOKENIZED_DATA:=tokenized_data}"
+export TRAINING_DATA="${TRAINING_DATA:=training_data}"
+export BASELINE_BPE_DATA="${BASELINE_BPE_DATA:=sent_bpe_data}"
+export YAKE5_BPE_DATA="${YAKE5_BPE_DATA:=yake5_bpe_data}"
+export YAKE10_BPE_DATA="${YAKE10_BPE_DATA:=yake10_bpe_data}"
+export TFIDF5_BPE_DATA="${TFIDF5_BPE_DATA:=tfidf5_bpe_data}"
+export TFIDF10_BPE_DATA="${TFIDF10_BPE_DATA:=tfidf10_bpe_data}"
 
 seq 0 3 | xargs -I{} mkdir -p ${TRAINING_DATA}/split{}
 
