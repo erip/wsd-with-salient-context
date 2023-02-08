@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from sacremoses import MosesTokeinzer
+from sacremoses import MosesTokenizer
 
 from argparse import ArgumentParser, FileType
 
