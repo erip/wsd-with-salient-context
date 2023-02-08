@@ -44,4 +44,11 @@ With all the data prepared, we can process the data for a given `$SALIENCY_FUNCT
 TGT=de SALIENCY_FUNCTION=tfidf5 bash fairseq_preprocess.sh
 ```
 
+## Training
+
+To train a model with a given `$SALIENCY_FUNCTION` with default hyperparameters:
+
+```bash
+SALIENCY_FUNCTION=tfidf5 bash train.sh
+```
 

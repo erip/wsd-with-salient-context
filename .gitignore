@@ -170,3 +170,4 @@ training_data/
 *.model
 *.vocab
 *-data-bin/**
+*-transformer/**
