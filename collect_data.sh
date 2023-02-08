@@ -18,7 +18,7 @@ mkdir -p $TOKENIZED_DATA
 wget -nc https://web-language-models.s3.us-east-1.amazonaws.com/paracrawl/release9/en-${TGT}/en-${TGT}.tmx.gz -P ${RAW_DATA}
 
 # may break if TGT doesn't support docid. We only used WMT21 en-de
-sacrebleu -t wmt21 -l en-de --echo docid src ref | unpaste ${RAW_DATA}/valid.en-${TGT}.{id,en,${TGT}}
+sacrebleu -t wmt21 -l en-${TGT} --echo docid src ref | unpaste ${RAW_DATA}/valid.en-${TGT}.{id,en,${TGT}}
 
 # Parse TMX and assign sentences a docid; mapping.en-de.tsv shows the docid to URL set mapping
 test -f ${RAW_DATA}/skinny-bos.en-${TGT}.tsv || (python scripts/parse_tmx.py -i ${RAW_DATA}/en-${TGT}.tmx.gz -o ${RAW_DATA}/skinny-bos.en-${TGT}.tsv -m ${RAW_DATA}/mapping.en-${TGT}.tsv -s en)
