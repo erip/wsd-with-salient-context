@@ -68,3 +68,6 @@ To train a model with a given `$SALIENCY_FUNCTION` with default hyperparameters:
 SALIENCY_FUNCTION=tfidf5 bash train.sh
 ```
 
+# Evaluation
+
+Assuming system outputs in `hyps/`, the WSD-specific evaluation can be performed with `bash eval.sh`. We note that some aspects of the resulting table are functions of training data distributions and refer you to `test/README.md` for specifics.
