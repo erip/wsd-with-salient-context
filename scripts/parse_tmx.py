@@ -3,6 +3,7 @@
 import csv
 import sys
 import gzip
+import hashlib
 import argparse
 
 from trim_fat import trim_urls
@@ -11,7 +12,8 @@ from lxml import etree as ET
 
 from collections import Counter
 
-
+def hash(s):
+    return hashlib.sha1(s).hexdigest()
 
 def smart_open(filepath, mode="rt"):
     """
@@ -57,7 +59,7 @@ if __name__ == "__main__":
                     row["tgt"] = tuv.find("seg").text.strip()
             assert not any(e is None for e in row.values()), str(row)
 
-            docname = " ".join(sorted(trim_urls(urls)))
+            docname = hash(" ".join(sorted(trim_urls(urls))).encode())
             if not docname in docids:
                 print(docname, file=args.mapping)
                 docids[docname] = len(docids)
