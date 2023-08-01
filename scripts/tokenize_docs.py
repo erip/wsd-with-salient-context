@@ -19,5 +19,5 @@ if __name__ == "__main__":
     with args.input as fin, args.output as fout:
         for src_sent in map(str.strip, fin):
             sents = src_sent.split(" [SENT] ")
-            tokenized_sents = [tokenizer.tokenize(sent, return_str=True) for sent in sents]
+            tokenized_sents = [tokenizer.tokenize(sent, return_str=True, escape=False) for sent in sents]
             print(" [SENT] ".join(tokenized_sents), file=fout)
