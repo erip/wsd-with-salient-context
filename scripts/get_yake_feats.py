@@ -15,5 +15,5 @@ if __name__ == "__main__":
     with args.input as fin, args.output as fout:
         for line in map(lambda s: s.strip("\r\n"), fin):
             id_, text = line.split("\t")
-            keywords = extractor.extract_keywords(text.replace(" [SENT] ", "").lower())
+            keywords = extractor.extract_keywords(text.replace(" [SENT] ", " ").lower())
             print(id_, " ".join(kw[0] for kw in keywords), sep="\t", file=fout)
